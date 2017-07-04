@@ -1,0 +1,14 @@
+
+Implemented grammar to avoid ambiguities
+
+
+Exp     ::= Term   { (+|-) Term   }
+Term    ::= Factor { (*|/) Factor }
+Factor  ::= - Factor | Power
+Power   ::= Primary ^ Power | Primary
+Primary ::= ( Exp ) | Number
+Number  ::= [0-9]+([.][0-9]+)?         -- (REGEX Syntax)
+
+
+
+

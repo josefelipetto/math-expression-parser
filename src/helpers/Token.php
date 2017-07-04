@@ -20,9 +20,11 @@ class Token{
 
 
 	/*
-		@var mixed $lexeme Lexeme of the token
+		@var mixed $lexeme Lexeme of the token. Optional argument
 	*/
 	protected $lexeme;
+
+	
 
 	
 	public function __construct($type,$lexeme = ''){

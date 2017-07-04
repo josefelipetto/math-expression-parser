@@ -22,11 +22,28 @@ class Lexer {
 	*/
 	protected $tokens;
 
+	
 
 	public function __construct($expression){
 
 		$this->expression = $expression;
 		$this->tokens     = [];
+
+	}
+
+	/*
+		Each time that function is called, returns the next token on the list(an instance of token)
+		@return Token
+	*/
+	public function getNextToken(){
+
+		$ret = current($this->tokens);  // get the current value of the internal pointer
+		
+		if(!$ret)
+			return (new Token('EOF'));
+
+		$aux = next($this->tokens); // increase the internal pointer, but don't return it.
+		return $ret;
 
 	}
 
@@ -37,7 +54,7 @@ class Lexer {
 	protected function tokenize(){
 
 		if(empty($this->expression)){
-			throw new InvalidArgumentException("Cannot process an empty expression");
+			throw new \InvalidArgumentException("Cannot process an empty expression");
 		}
 
 		$expressionSize = strlen($this->expression);
@@ -68,10 +85,10 @@ class Lexer {
 							$currentChar = $this->expression[$i];
 						}	
 					}else{
-						throw new InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]*");
+						throw new \InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]*");
 					}
 
-					$token = new Token('N',(float)$number);
+					$token = new Token('Number',(float)$number);
 					$--;
 					$number = '';
 				}else if($currentChar === '+'){
@@ -85,7 +102,7 @@ class Lexer {
 				}else if($currentChar === '^'){
 					$token = new Token('^');
 				}else{
-					throw new InvalidArgumentException("Invalid token were given");
+					throw new \InvalidArgumentException("Invalid token were given");
 				}
 			}
 			$i++;
