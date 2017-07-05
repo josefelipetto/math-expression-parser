@@ -2,7 +2,8 @@
 
 namespace Parser;
 
-use Parser\Helpers\Token;
+use Helpers\Token;
+
 
 /*
 	Tokenize a numeric expression
@@ -24,10 +25,19 @@ class Lexer {
 
 	
 
+	/*
+		Constructor. Try to tokenize the given expression.
+	*/
 	public function __construct($expression){
 
 		$this->expression = $expression;
 		$this->tokens     = [];
+
+		try{
+			$this->tokenize();
+		}catch(InvalidArgumentException $e){
+			echo $e->getMessage();
+		}
 
 	}
 
@@ -40,7 +50,7 @@ class Lexer {
 		$ret = current($this->tokens);  // get the current value of the internal pointer
 		
 		if(!$ret)
-			return (new Token('EOF'));
+			return (new Helpers\Token('EOF'));
 
 		$aux = next($this->tokens); // increase the internal pointer, but don't return it.
 		return $ret;
@@ -58,8 +68,10 @@ class Lexer {
 		}
 
 		$expressionSize = strlen($this->expression);
+		//echo $expressionSize;
 		$i = 0;
 		$number = '';
+		$currentChar = '';
 
 		while($i < $expressionSize){
 
@@ -68,13 +80,16 @@ class Lexer {
 				$i++;
 				continue;
 			}else if(is_numeric($currentChar)){
+
 				while(is_numeric($currentChar)){
 					$number .= $currentChar;
 					$i++;
+					if($i >= $expressionSize) break;
 					$currentChar = $this->expression[$i];
 				}
+
 				// Checks if it is a flutuan point
-				if($currentChar == '.'){
+				if($currentChar === '.'){
 					$number .= $currentChar;
 					$i++;
 					$currentChar = $this->expession[$i];
@@ -87,23 +102,27 @@ class Lexer {
 					}else{
 						throw new \InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]*");
 					}
-
-					$token = new Token('Number',(float)$number);
-					$--;
-					$number = '';
-				}else if($currentChar === '+'){
-					$token = new Token('+');
-				}else if($currentChar === '-'){
-					$token = new Token('-');
-				}else if($currentChar === '*'){
-					$token = new Token('*');
-				}else if($currentChar === '/'){
-					$token = new Token('/');
-				}else if($currentChar === '^'){
-					$token = new Token('^');
-				}else{
-					throw new \InvalidArgumentException("Invalid token were given");
 				}
+				$token = new Helpers\Token('Number',(float)$number);
+				$i--;
+				$number = '';
+				
+			}else if($currentChar === '+'){
+				$token = new Helpers\Token('+');
+			}else if($currentChar === '-'){
+				$token = new Helpers\Token('-');
+			}else if($currentChar === '*'){
+				$token = new Helpers\Token('*');
+			}else if($currentChar === '/'){
+				$token = new Helpers\Token('/');
+			}else if($currentChar === '^'){
+				$token = new Helpers\Token('^');
+			}else if($currentChar === "("){
+				$token = new Helpers\Token('(');
+			}else if($currentChar === ")"){
+				$token = new Helpers\Token(')');
+			}else{
+				throw new \InvalidArgumentException("Invalid token {$currentChar} were given ");
 			}
 			$i++;
 			$this->tokens[] = $token;

@@ -8,7 +8,7 @@ namespace Parser\Helpers;
 	@author José Henrique Medeiros Felipetto - jose.felipetto@pucpr.br
 */
 
-class Token{
+class Token {
 
 
 
@@ -39,7 +39,7 @@ class Token{
 	}
 
 	public function getLexeme(){
-		$return $this->lexeme;
+		return $this->lexeme;
 	}
 
 
