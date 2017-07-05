@@ -4,10 +4,10 @@ A Math expression parser built in PHP.
 # Requirements
 * PHP 7.0
 
-## Installation
+# Installation
 Just clone or download this repo. Future versions you will be able to install through composer.
 
-### How to use
+## How to use
 ```php
 use Parser\Evaluator;
 
