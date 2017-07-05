@@ -1,5 +1,5 @@
 # math-expression-parser
-A Math expression parser built in PHP. 
+A Math expression parser built in PHP.
 
 # Requirements
 * PHP 7.0 (still have to test on previous php versions)
@@ -20,4 +20,4 @@ echo $evaluator->getResult(); // Get the result of the given expression on parse
 
 # Grammar
 
-The parser accepts the following operators: +  ; - ; . ; * ; / ; ^ ; ( ; ) 
+The parser accepts the following operators: +  ; - ; . ; * ; / ; ^ ; ( ; )
