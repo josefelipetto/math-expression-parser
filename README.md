@@ -2,7 +2,7 @@
 A Math expression parser built in PHP. 
 
 # Requirements
-* PHP 7.0
+* PHP 7.0 (still have to test on previous php versions)
 
 # Installation
 Just clone or download this repo. Future versions you will be able to install through composer.
