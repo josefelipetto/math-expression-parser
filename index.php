@@ -2,4 +2,4 @@
 
 require 'vendor/autoload.php';
 
-require 'test.php';
+require 'test/test.php';

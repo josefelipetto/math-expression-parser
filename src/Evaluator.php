@@ -23,19 +23,8 @@ class Evaluator {
 	/*
 		Constructor. Generate the ast and try to evaluate.
 	*/
-	public function __construct($expression){
-		
-		$this->expression = $expression;
-		$syntactic = new Syntactic($this->expression);
-		
-		// try to generate the abstract syntactic tree (ast)
-		try{
-			$this->ast = $syntactic->parse();	
-		}catch(\RunTimeException $e){
-			echo $e->getMessage();
-		}
-
-		
+	public function __construct(){
+			
 	}
 
 
@@ -43,7 +32,17 @@ class Evaluator {
 		Initiate the whole process and set the result property.
 
 	*/
-	public function parse(){
+	public function parse($expression){
+		$this->expression = $expression;
+		$syntactic = new Syntactic($this->expression);
+
+		// try to generate the abstract syntactic tree (ast)
+		try{
+			$this->ast = $syntactic->parse();
+		}catch(\RunTimeException $e){
+			echo $e->getMessage();
+		}
+
 		// try to evaluate the expression
 		try{
 			$this->result = $this->evaluate($this->ast);

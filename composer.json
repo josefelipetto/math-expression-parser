@@ -1,7 +1,21 @@
 {
-	"autoload":{
-		"psr-4":{
-			"Parser\\" : "src"
-		}
-	}
+    "name": "josefelipetto/parser",
+    "description": "A component to parse all kind of numerical expressions and solve them",
+    "keywords"   : ["parser","expression","math"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "José Henrique Medeiros Felipetto",
+            "homepage":"https://github.com/josefelipetto",
+            "email": "jose.felipetto@pucpr.br"
+        }
+    ],
+
+    "autoload":{
+        "psr-4":{
+            "Parser\\" : "src"
+        }
+    }
+
 }

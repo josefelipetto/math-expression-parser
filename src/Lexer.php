@@ -92,15 +92,16 @@ class Lexer {
 				if($currentChar === '.'){
 					$number .= $currentChar;
 					$i++;
-					$currentChar = $this->expession[$i];
+					$currentChar = $this->expression[$i];
 					if(is_numeric($currentChar)){
 						while(is_numeric($currentChar)){
 							$number .= $currentChar;
 							$i++;
+							if($i >= $expressionSize) break;
 							$currentChar = $this->expression[$i];
 						}	
 					}else{
-						throw new \InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]*");
+						throw new \InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]* ");
 					}
 				}
 				$token = new Helpers\Token('Number',(float)$number);
