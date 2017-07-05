@@ -1,46 +1,40 @@
-<?php 
+<?php
 
 namespace Parser\Helpers;
 
 /*
-	Token class
+    Token class
 
-	@author José Henrique Medeiros Felipetto - jose.felipetto@pucpr.br
+    @author José Henrique Medeiros Felipetto - jose.felipetto@pucpr.br
 */
 
-class Token {
+class Token
+{
 
+    /*
+        @var string $type Type of the token
+    */
+    protected $type;
 
+    /*
+        @var mixed $lexeme Lexeme of the token. Optional argument
+    */
+    protected $lexeme;
 
-	/*
-		@var string $type Type of the token
-	*/
-	protected $type;
+    public function __construct($type,$lexeme = '')
+    {
 
+        $this->type   = $type;
+        $this->lexeme = $lexeme;
+    }
 
+    public function getType()
+    {
+        return $this->type;
+    }
 
-	/*
-		@var mixed $lexeme Lexeme of the token. Optional argument
-	*/
-	protected $lexeme;
-
-	
-
-	
-	public function __construct($type,$lexeme = ''){
-
-		$this->type   = $type;
-		$this->lexeme = $lexeme;
-	}
-
-	
-	public function getType(){
-		return $this->type;
-	}
-
-	public function getLexeme(){
-		return $this->lexeme;
-	}
-
-
+    public function getLexeme()
+    {
+        return $this->lexeme;
+    }
 }
