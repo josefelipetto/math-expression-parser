@@ -21,11 +21,11 @@ echo $evaluator->getResult(); // Get the result of the given expression on parse
 # Grammar
 
 The parser accepts the following operators:
-	* + 
-	* - 
-	* *
-	* /
-	* ^
-	* (
-	* )
+	*  + 
+	*  - 
+	*  '*'
+	*  /
+	*  ^
+	*  (
+	*  )
 
