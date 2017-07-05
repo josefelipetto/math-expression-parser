@@ -68,7 +68,7 @@ class Lexer {
 		}
 
 		$expressionSize = strlen($this->expression);
-		//echo $expressionSize;
+		
 		$i = 0;
 		$number = '';
 		$currentChar = '';
@@ -76,7 +76,7 @@ class Lexer {
 		while($i < $expressionSize){
 
 			$currentChar = $this->expression[$i];
-			if($currentChar == ' ' || $currentChar == '\n' || $currentChar == '\t'){
+			if($currentChar === ' ' || $currentChar === '\n' || $currentChar === '\t'){
 				$i++;
 				continue;
 			}else if(is_numeric($currentChar)){
