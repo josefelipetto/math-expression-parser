@@ -1,6 +1,9 @@
 # math-expression-parser
 A Math expression parser built in PHP. 
 
+#Requirements
+* PHP 7.0
+
 # Installation
 Just clone or download this repo. Future versions you will be able to install through composer.
 

@@ -32,7 +32,7 @@ class Evaluator {
 		Initiate the whole process and set the result property.
 
 	*/
-	public function parse($expression){
+	public function parse(string $expression){
 		$this->expression = $expression;
 		$syntactic = new Syntactic($this->expression);
 
