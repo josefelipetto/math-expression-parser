@@ -1,5 +1,5 @@
 {
-    "name": "josefelipetto/parser",
+    "name": "josefelipetto/math-expression-parser",
     "description": "A component to parse all kind of numerical expressions and solve them",
     "keywords"   : ["parser","expression","math"],
     "type": "library",
@@ -16,6 +16,9 @@
         "psr-4":{
             "Parser\\" : "src"
         }
+    },
+    "require":{
+        "php": "^7.0"
     }
 
 }
