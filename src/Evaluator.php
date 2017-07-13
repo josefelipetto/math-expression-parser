@@ -16,11 +16,6 @@ class Evaluator
     protected $ast;
 
     /*
-        @var $result Float Where the result will be stored
-    */
-    protected $result;
-
-    /*
         Constructor. Generate the ast and try to evaluate.
     */
     public function __construct()
@@ -34,6 +29,7 @@ class Evaluator
     */
     public function parse(string $expression)
     {
+
         $this->expression = $expression;
         $syntactic = new Syntactic($this->expression);
 
@@ -48,20 +44,12 @@ class Evaluator
         // try to evaluate the expression
         try
         {
-            $this->result = $this->evaluate($this->ast);
+            return $this->evaluate($this->ast);
         }catch(\RunTimeException $e)
         {
             echo $e->getMessage();
         }
-    }
 
-    /*
-        public interface to get the result
-        @return Float
-    */
-    public function getResult()
-    {
-        return $this->result;
     }
 
     /*

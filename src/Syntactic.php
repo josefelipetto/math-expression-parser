@@ -90,6 +90,7 @@ class Syntactic
                     $expressionAux = $this->term();
                     if($expressionAux)
                     {
+
                         $expression = [
                             "tag" => $operator->getType() === "+" ? "Plus" : "Minus",
                             $expression,

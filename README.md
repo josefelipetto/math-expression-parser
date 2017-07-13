@@ -14,9 +14,9 @@ composer.json file to require the component.
 use Parser\Evaluator;
 
 $evaluator = new Evaluator();
-$evaluator->parse('(2+0)^(2+3)/2*3^34*76/(9+123)'); // you should pass a string as argument
+$res = $evaluator->parse('(2+0)^(2+3)/2*3^34*76/(9+123)'); // you should pass a string as argument
 
-echo $evaluator->getResult(); // Get the result of the given expression on parse function
+var_dump($res);
 
 ```
 
