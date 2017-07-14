@@ -59,30 +59,33 @@ class Evaluator
 
     */
     private function evaluate($ast)
+
     {
         if($ast['tag'] == 'Number')
-        {
             return $ast[0];
-        } else if($ast['tag'] == 'Plus')
-        {
+
+        else if($ast['tag'] == 'Plus')
             return $this->evaluate($ast[0]) + $this->evaluate($ast[1]);
-        } else if($ast['tag'] == 'Minus')
-        {
+        
+        else if($ast['tag'] == 'Minus')
             return $this->evaluate($ast[0] - $ast[1]);
-        } else if($ast['tag'] == 'Times')
-        {
+        
+        else if($ast['tag'] == 'Times')
             return $this->evaluate($ast[0]) * $this->evaluate($ast[1]);
-        } else if($ast['tag'] == 'Division')
+        
+        else if($ast['tag'] == 'Division')
         {
             if($ast[1] == 0)
                 throw new RunTimeException("Division by 0");
             return $this->evaluate($ast[0]) / $this->evaluate($ast[1]);
-        } else if($ast['tag'] == 'Power')
-        {
-            return pow($this->evaluate($ast[0]),$this->evaluate($ast[1]));
-        } else if($ast['tag'] == 'Unary')
-        {
-            return (0 - $this->evaluate($ast[0]));
         }
+
+        else if($ast['tag'] == 'Power')
+            return pow($this->evaluate($ast[0]),$this->evaluate($ast[1]));
+        
+        else if($ast['tag'] == 'Unary')
+            return (0 - $this->evaluate($ast[0]));
+        
+
     }
 }
