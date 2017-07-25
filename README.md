@@ -16,7 +16,7 @@ use Parser\Evaluator;
 $evaluator = new Evaluator();
 $res = $evaluator->parse('(2+0)^(2+3)/2*3^34*76/(9+123)'); // you should pass a string as argument
 
-var_dump($res);
+var_dump($res); // just for debug 
 
 ```
 
