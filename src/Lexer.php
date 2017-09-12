@@ -33,7 +33,8 @@ class Lexer
         try
         {
             $this->tokenize();
-        }catch(InvalidArgumentException $e)
+        }
+        catch(InvalidArgumentException $e)
         {
             echo $e->getMessage();
         }
@@ -45,8 +46,12 @@ class Lexer
     public function getNextToken()
     {
         $ret = current($this->tokens);  // get the current value of the internal pointer
+
         if(!$ret)
+        {
             return (new Helpers\Token('EOF'));
+        }
+
         $aux = next($this->tokens); // increase the internal pointer, but don't return it.
         return $ret;
     }
@@ -72,7 +77,8 @@ class Lexer
             {
                 $i++;
                 continue;
-            } else if(is_numeric($currentChar))
+            }
+            else if(is_numeric($currentChar))
             {
                 while(is_numeric($currentChar))
                 {
@@ -96,7 +102,8 @@ class Lexer
                             if($i >= $expressionSize) break;
                             $currentChar = $this->expression[$i];
                         }
-                    } else
+                    }
+                    else
                     {
                         throw new \InvalidArgumentException("Flutuant points shoud be like [0-9].[0-9][0-9]* ");
                     }
@@ -104,28 +111,36 @@ class Lexer
                 $token = new Helpers\Token('Number',(float)$number);
                 $i--;
                 $number = '';
-            } else if($currentChar === '+')
+            }
+            else if($currentChar === '+')
             {
                 $token = new Helpers\Token('+');
-            } else if($currentChar === '-')
+            }
+            else if($currentChar === '-')
             {
                 $token = new Helpers\Token('-');
-            } else if($currentChar === '*')
+            }
+            else if($currentChar === '*')
             {
                 $token = new Helpers\Token('*');
-            } else if($currentChar === '/')
+            }
+            else if($currentChar === '/')
             {
                 $token = new Helpers\Token('/');
-            } else if($currentChar === '^')
+            }
+            else if($currentChar === '^')
             {
                 $token = new Helpers\Token('^');
-            } else if($currentChar === "(")
+            }
+            else if($currentChar === "(")
             {
                 $token = new Helpers\Token('(');
-            } else if($currentChar === ")")
+            }
+            else if($currentChar === ")")
             {
                 $token = new Helpers\Token(')');
-            } else
+            }
+            else
             {
                 throw new \InvalidArgumentException("Invalid token {$currentChar} were given ");
             }

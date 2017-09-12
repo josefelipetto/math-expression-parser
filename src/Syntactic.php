@@ -54,7 +54,8 @@ class Syntactic
         try
         {
             $this->ast   = $this->exp();
-        }catch(\RunTimeException $e)
+        }
+        catch(\RunTimeException $e)
         {
             echo $e->getMessage();
         }
@@ -65,7 +66,9 @@ class Syntactic
             if($token)
             {
                 return $this->ast;
-            } else{
+            }
+            else
+            {
                 throw new \RunTimeException("Error Processing Request");
             }
         }
@@ -91,22 +94,26 @@ class Syntactic
                     if($expressionAux)
                     {
 
-                        $expression = [
-                            "tag" => $operator->getType() === "+" ? "Plus" : "Minus",
-                            $expression,
-                            $expressionAux
-                        ];
-                    } else
+                        $expression =
+                            [
+                                "tag" => $operator->getType() === "+" ? "Plus" : "Minus",
+                                $expression,
+                                $expressionAux
+                            ];
+                    }
+                    else
                     {
                         throw new \RunTimeException("After the operator {$operator->getType()} must have a expression");
                     }
-                } else
+                }
+                else
                 {
                     throw new \RunTimeException("Could not read the operator {$this->token->getType()} ");
                 }
             }
             return $expression;
-        } else
+        }
+        else
         {
             throw new \RunTimeException("A expression must be provided");
         }
@@ -136,11 +143,13 @@ class Syntactic
                              $expression,
                              $expressionAux
                         ];
-                    } else
+                    }
+                    else
                     {
                         throw new \RunTimeException("After a {$operator->getType()} must have a expression");
                     }
-                } else
+                }
+                else
                 {
                     throw new \RunTimeException("Could not read the operator {$this->token->getType()} ");
                 }
@@ -164,12 +173,17 @@ class Syntactic
             $operator = $this->read("-");
             if($operator)
             {
-                return ["tag" => "Unary", $this->factor()];
-            } else
+                return [
+                    "tag" => "Unary",
+                    $this->factor()
+                ];
+            }
+            else
             {
                 throw new \RunTimeException("After unary operand, should have a expression");
             }
-        } else
+        }
+        else
         {
             return $this->power();
         }
@@ -194,17 +208,21 @@ class Syntactic
                     if($expressionAux)
                     {
                         $expression = ["tag"=>"Power",$expression,$expressionAux];
-                    } else
+                    }
+                    else
                     {
                         throw new \RunTimeException("After a ^ should have a expression");
                     }
-                } else
+                }
+                else
                 {
                     throw new \RunTimeException("Could not read operator ^");
                 }
             }
             return $expression;
-        } else {
+        }
+        else
+        {
             throw new \RunTimeException("Expression must be provided");
         }
     }
@@ -223,11 +241,13 @@ class Syntactic
             if($numberToken)
             {
                 return ["tag"=>"Number",$numberToken->getLexeme()];
-            } else
+            }
+            else
             {
                 throw new \RunTimeException("Error processing a number on the tree");
             }
-        } else if($this->token->getType() === "(")
+        }
+        else if($this->token->getType() === "(")
         {
             $bracketToken = $this->read("(");
             if($bracketToken)
@@ -236,16 +256,21 @@ class Syntactic
                 if($expression)
                 {
                     $bracketToken = $this->read(")");
-                    if($bracketToken){
+                    if($bracketToken)
+                    {
                         return $expression;
-                    } else{
+                    }
+                    else
+                    {
                         throw new \RunTimeException("Brackets should be balanced");
                     }
-                } else
+                }
+                else
                 {
                     throw new \RunTimeException("After a ( should have another expression");
                 }
-            } else
+            }
+            else
             {
                 throw new \RunTimeException("Error trying to read ( char");
             }
@@ -266,7 +291,8 @@ class Syntactic
             $oldToken = $this->token;
             $this->token = $this->lexer->getNextToken();
             return $oldToken;
-        } else
+        }
+        else
         {
             throw new \InvalidArgumentException(
                     "Cannot read operator {$type} - Current operator is " . $this->token->getType()

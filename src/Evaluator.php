@@ -37,7 +37,8 @@ class Evaluator
         try
         {
             $this->ast = $syntactic->parse();
-        }catch(\RunTimeException $e){
+        }
+        catch(\RunTimeException $e){
             echo $e->getMessage();
         }
 
@@ -45,7 +46,8 @@ class Evaluator
         try
         {
             return $this->evaluate($this->ast);
-        }catch(\RunTimeException $e)
+        }
+        catch(\RunTimeException $e)
         {
             echo $e->getMessage();
         }
@@ -59,7 +61,6 @@ class Evaluator
 
     */
     private function evaluate($ast)
-
     {
         if($ast['tag'] == 'Number')
             return $ast[0];
