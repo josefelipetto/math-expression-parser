@@ -69,7 +69,7 @@ class Evaluator
             return $this->evaluate($ast[0]) + $this->evaluate($ast[1]);
         
         else if($ast['tag'] == 'Minus')
-            return $this->evaluate($ast[0] - $ast[1]);
+            return $this->evaluate($ast[0])  - $this->evaluate($ast[1]);
         
         else if($ast['tag'] == 'Times')
             return $this->evaluate($ast[0]) * $this->evaluate($ast[1]);
