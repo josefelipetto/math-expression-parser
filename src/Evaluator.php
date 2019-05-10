@@ -16,18 +16,10 @@ class Evaluator
     protected $ast;
 
     /*
-        Constructor. Generate the ast and try to evaluate.
-    */
-    public function __construct()
-    {
-        // Constructor Left Blank
-    }
-
-    /*
         Initiate the whole process and set the result property.
 
     */
-    public function parse(string $expression)
+    public function __invoke(string $expression)
     {
 
         $this->expression = $expression;
@@ -37,18 +29,9 @@ class Evaluator
         try
         {
             $this->ast = $syntactic->parse();
-        }
-        catch(\RunTimeException $e){
-            echo $e->getMessage();
-        }
-
-        // try to evaluate the expression
-        try
-        {
             return $this->evaluate($this->ast);
         }
-        catch(\RunTimeException $e)
-        {
+        catch(\RunTimeException $e){
             echo $e->getMessage();
         }
 
@@ -62,31 +45,44 @@ class Evaluator
     */
     private function evaluate($ast)
     {
-        if($ast['tag'] == 'Number')
-            return $ast[0];
-
-        else if($ast['tag'] == 'Plus')
-            return $this->evaluate($ast[0]) + $this->evaluate($ast[1]);
-        
-        else if($ast['tag'] == 'Minus')
-            return $this->evaluate($ast[0])  - $this->evaluate($ast[1]);
-        
-        else if($ast['tag'] == 'Times')
-            return $this->evaluate($ast[0]) * $this->evaluate($ast[1]);
-        
-        else if($ast['tag'] == 'Division')
+        if($ast['tag'] === 'Number')
         {
-            if($ast[1] == 0)
-                throw new RunTimeException("Division by 0");
+            return $ast[0];
+        }
+
+        if($ast['tag'] === 'Plus')
+        {
+            return $this->evaluate($ast[0]) + $this->evaluate($ast[1]);
+        }
+
+        if($ast['tag'] === 'Minus')
+        {
+            return $this->evaluate($ast[0]) - $this->evaluate($ast[1]);
+        }
+
+        if($ast['tag'] === 'Times')
+        {
+            return $this->evaluate($ast[0]) * $this->evaluate($ast[1]);
+        }
+
+        if($ast['tag'] === 'Division')
+        {
+            if($ast[1] === 0)
+            {
+                throw new \RunTimeException('Division by 0');
+            }
+
             return $this->evaluate($ast[0]) / $this->evaluate($ast[1]);
         }
 
-        else if($ast['tag'] == 'Power')
-            return pow($this->evaluate($ast[0]),$this->evaluate($ast[1]));
-        
-        else if($ast['tag'] == 'Unary')
-            return (0 - $this->evaluate($ast[0]));
-        
+        if($ast['tag'] === 'Power')
+        {
+            return $this->evaluate($ast[0]) ** $this->evaluate($ast[1]);
+        }
 
+        if($ast['tag'] === 'Unary')
+        {
+            return (0 - $this->evaluate($ast[0]));
+        }
     }
 }

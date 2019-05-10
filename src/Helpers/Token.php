@@ -28,12 +28,12 @@ class Token
         $this->lexeme = $lexeme;
     }
 
-    public function getType()
+    public function getType() : string
     {
         return $this->type;
     }
 
-    public function getLexeme()
+    public function getLexeme() : ?string
     {
         return $this->lexeme;
     }
