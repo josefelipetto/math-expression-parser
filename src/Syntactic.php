@@ -2,6 +2,7 @@
 
 namespace Parser;
 
+use InvalidArgumentException;
 use Parser\Helpers\Token;
 use RuntimeException;
 
@@ -11,258 +12,243 @@ use RuntimeException;
     @author José Henrique Medeiros Felipetto - jose.felipetto@pucpr.br
 */
 
+/**
+ * Class Syntactic
+ * @package Parser
+ */
 class Syntactic
 {
 
-    /*
-        @var Token $token
-    */
-    private Token $token;
+    /**
+     * @var Token
+     */
+    private $token;
 
-    /*
-        @var Lexer $lexer  Should contain the instance of the Lexer
-    */
-    private Lexer $lexer;
 
-    /*
-        @var mixed[] $ast  Should contain the ast generated
-    */
+    /**
+     * @var Lexer
+     */
+    private $lexer;
+
+
+    /**
+     * @var
+     */
     private $ast;
 
-    /*
-        Constructor. Initiate the lexer instance
-    */
+
+    /**
+     * Syntactic constructor.
+     * @param $expression
+     */
     public function __construct($expression)
     {
         $this->lexer = new Lexer($expression);
     }
 
-    /*
-        public interface with the world. Starts the whole process.
+    /**
+     *  public interface with the world. Starts the whole process.
         Each ast peace it's composed by an associative array like this:
-            [
-                'tag' => 'Number|Plus|Minus|Times|Division|Power|Unary',
-                left factor,
-                optional right factor
-            ]
-        @throws \RunTimeException
-    */
+        [
+            'tag' => 'Number|Plus|Minus|Times|Division|Power|Unary',
+            left factor,
+            optional right factor
+        ]
+     * @throws RuntimeException
+     * @return array|null
+     */
     public function parse() : ?array
     {
 
         $this->token = $this->lexer->getNextToken(); // get the first token
 
-        try
-        {
-            $this->ast   = $this->exp();
-        }
-        catch(RunTimeException $e)
-        {
-            echo $e->getMessage();
+        $this->ast = $this->exp();
+
+        if (!$this->ast) {
+            throw new RuntimeException('Couldnt generate the AST');
         }
 
-        if($this->ast)
+        $token = $this->read('EOF');
+
+        if (!$token)
         {
-            $token = $this->read('EOF');
-
-            if($token)
-            {
-                return $this->ast;
-            }
-
-            throw new \RunTimeException('Error Processing Request');
+            throw new RuntimeException('Error Processing Request');
         }
+
+        return $this->ast;
     }
 
-    /*
-        Implementation of: Exp ::= Term { (+|-) Term }
-        @return mixed[] colletion to compose the ast
-        @throws \RunTimeException
-    */
+    /**
+     * Implementation of: Exp ::= Term { (+|-) Term }
+     * @return mixed[] colletion to compose the ast
+     * @throws RuntimeException
+     */
     private function exp() : ?array
     {
         $expression = $this->term();
 
-        if($expression)
-        {
-            while($this->token->getType() === '+' || $this->token->getType() === '-')
-            {
-                $operator = $this->read($this->token->getType());
-                if($operator)
-                {
-                    $expressionAux = $this->term();
-                    if($expressionAux)
-                    {
-
-                        $expression =
-                            [
-                                'tag' => $operator->getType() === '+' ? 'Plus' : 'Minus',
-                                $expression,
-                                $expressionAux
-                            ];
-                    }
-                    else
-                    {
-                        throw new \RunTimeException("After the operator {$operator->getType()} must have a expression");
-                    }
-                }
-                else
-                {
-                    throw new \RunTimeException("Could not read the operator {$this->token->getType()} ");
-                }
-            }
-            return $expression;
+        if (!$expression) {
+            throw new RuntimeException('A expression must be provided');
         }
 
-        throw new \RunTimeException('A expression must be provided');
+        while ($this->token->getType() === '+' || $this->token->getType() === '-') {
 
+            $operator = $this->read($this->token->getType());
+
+            if (!$operator) {
+                throw new RuntimeException("Could not read the operator {$this->token->getType()} ");
+            }
+
+            $expressionAux = $this->term();
+
+            if (!$expressionAux) {
+                throw new RuntimeException("After the operator {$operator->getType()} must have a expression");
+            }
+
+            $expression = [
+                'tag' => $operator->getType() === '+' ? 'Plus' : 'Minus',
+                $expression,
+                $expressionAux
+            ];
+
+        }
+
+        return $expression;
     }
 
-    /*
-        Implementation of: Term ::= Factor { (*|/) Factor }
-        @return mixed[] colletion to compose the ast
-        @throws \RunTimeException
-    */
+    /**
+     * Implementation of: Term ::= Factor { (*|/) Factor }
+     * @return mixed[] colletion to compose the ast
+     * @throws RuntimeException
+     */
     private function term() : ?array
     {
 
         $expression = $this->factor();
 
-        if($expression)
-        {
-            while($this->token->getType() === '*' || $this->token->getType() === '/')
-            {
-                $operator = $this->read($this->token->getType());
-                if($operator)
-                {
-                    $expressionAux = $this->factor();
-                    if($expressionAux)
-                    {
-                        $expression = [
-                            'tag' => $operator->getType() === '*' ? 'Times' : 'Division',
-                             $expression,
-                             $expressionAux
-                        ];
-                    }
-                    else
-                    {
-                        throw new \RunTimeException("After a {$operator->getType()} must have a expression");
-                    }
-                }
-                else
-                {
-                    throw new \RunTimeException("Could not read the operator {$this->token->getType()} ");
-                }
-            }
-            return $expression;
+        if (!$expression) {
+            throw new RuntimeException('A expression must be provided');
         }
 
-        throw new \RunTimeException('A expression must be provided');
+        while ($this->token->getType() === '*' || $this->token->getType() === '/') {
+
+            $operator = $this->read($this->token->getType());
+
+            if (!$operator) {
+                throw new RuntimeException("Could not read the operator {$this->token->getType()} ");
+            }
+
+            $expressionAux = $this->factor();
+
+            if (!$expressionAux) {
+                throw new RuntimeException("After a {$operator->getType()} must have a expression");
+            }
+
+            $expression = [
+                'tag' => $operator->getType() === '*' ? 'Times' : 'Division',
+                $expression,
+                $expressionAux
+            ];
+        }
+
+        return $expression;
     }
 
-    /*
-        Implementation of: Factor ::= - Factor | Power
-        @return mixed[] colletion to compose the ast
-        @throws \RunTimeException
-    */
-    private function factor()
+    /**
+     * Implementation of: Factor ::= - Factor | Power
+     *  @return mixed[] colletion to compose the ast
+     *  @throws RuntimeException
+     */
+    private function factor(): array
     {
-        if($this->token->getType() === '-')
-        {
+        if ($this->token->getType() === '-') {
+
             $operator = $this->read('-');
-            if($operator)
-            {
-                return [
-                    'tag' => 'Unary',
-                    $this->factor()
-                ];
+
+            if (!$operator) {
+                throw new RuntimeException('After unary operand, should have a expression');
             }
-            else
-            {
-                throw new \RunTimeException('After unary operand, should have a expression');
-            }
+
+            return [
+                'tag' => 'Unary',
+                $this->factor()
+            ];
         }
 
         return $this->power();
     }
 
-    /*
-        Implementation of: Power ::= Primary ^ Power | Primary
-        @return mixed[] colletion to compose the ast
-        @throws \RunTimeException
-    */
+    /**
+     * Implementation of: Power ::= Primary ^ Power | Primary
+     * @return mixed[] colletion to compose the ast
+     * @throws RuntimeException
+     */
     private function power() : ?array
     {
         $expression = $this->primary();
-        if($expression)
-        {
-            while($this->token->getType() === '^')
-            {
-                $operator = $this->read('^');
-                if($operator)
-                {
-                    $expressionAux = $this->factor();
-                    if($expressionAux)
-                    {
-                        $expression = ['tag'=>'Power',$expression,$expressionAux];
-                    }
-                    else
-                    {
-                        throw new \RunTimeException('After a ^ should have a expression');
-                    }
-                }
-                else
-                {
-                    throw new \RunTimeException('Could not read operator ^');
-                }
+
+        if (!$expression) {
+            throw new RuntimeException('Expression must be provided');
+        }
+
+        while ($this->token->getType() === '^') {
+
+            $operator = $this->read('^');
+
+            if (!$operator) {
+                throw new RuntimeException('Could not read operator ^');
             }
-            return $expression;
+
+            $expressionAux = $this->factor();
+
+            if (!$expressionAux) {
+                throw new RuntimeException('After a ^ should have a expression');
+            }
+
+            $expression = ['tag'=>'Power',$expression,$expressionAux];
         }
-        else
-        {
-            throw new \RunTimeException('Expression must be provided');
-        }
+
+        return $expression;
     }
 
-    /*
-        Implementation of: Primary ::= Number | (Exp)
-        @return mixed[] collection to compose the ast.
-        @throws \RunTimeException
-    */
-    private function primary()
+    /**
+     * Implementation of: Primary ::= Number | (Exp)
+     * @return mixed[] collection to compose the ast.
+     * @throws RuntimeException
+     */
+    private function primary(): array
     {
 
         $errorMessages = [];
 
-        if($this->token->getType() === 'Number')
-        {
+        if ($this->token->getType() === 'Number') {
+
             $numberToken = $this->read('Number');
-            if($numberToken)
-            {
-                return [
-                    'tag'=>'Number',
-                    $numberToken->getLexeme()
-                ];
+
+            if (!$numberToken) {
+                throw new RuntimeException('Error processing a number on the tree');
             }
 
-            throw new \RunTimeException('Error processing a number on the tree');
+            return [
+                'tag'=>'Number',
+                $numberToken->getLexeme()
+            ];
+
         }
 
-        if($this->token->getType() === '(')
-        {
+        if ($this->token->getType() === '(') {
+
             $bracketToken = $this->read('(');
 
-            if($bracketToken)
-            {
+            if ($bracketToken) {
+
                 $expression = $this->exp();
 
-                if($expression)
-                {
+                if ($expression) {
 
                     $bracketToken = $this->read(')');
 
-                    if($bracketToken)
-                    {
+                    if ($bracketToken) {
                         return $expression;
                     }
 
@@ -275,29 +261,27 @@ class Syntactic
             $errorMessages[] = 'Error trying to read ( char';
         }
 
-        throw new \RunTimeException(implode('|', $errorMessages));
+        throw new RuntimeException(implode('|', $errorMessages));
     }
 
-    /*
-        If the token type matches the param, getNextToken and return the old one
-        @param  String $type Type of the token you want to compare
-        @return Token 		 Return the current token before we get the next
-        @throws InvalidArgumentException
-    */
+    /**
+     * If the token type matches the param, getNextToken and return the old one
+     * @param  String $type Type of the token you want to compare
+     * @return Token 		 Return the current token before we get the next
+     * @throws InvalidArgumentException
+     */
     private function read($type)
     {
 
-        if($this->token->getType() === $type)
-        {
-            $oldToken = $this->token;
-
-            $this->token = $this->lexer->getNextToken();
-
-            return $oldToken;
+        if ($this->token->getType() !== $type) {
+            throw new InvalidArgumentException(
+                "Cannot read operator {$type} - Current operator is " . $this->token->getType()
+            );
         }
 
-        throw new \InvalidArgumentException(
-            "Cannot read operator {$type} - Current operator is " . $this->token->getType()
-        );
+        $oldToken = $this->token;
+        $this->token = $this->lexer->getNextToken();
+
+        return $oldToken;
     }
 }
