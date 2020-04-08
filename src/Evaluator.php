@@ -2,24 +2,20 @@
 
 namespace Parser;
 
+use Parser\Contracts\Evaluatable;
 use RunTimeException;
 
 /**
  * Class Evaluator
  * @package Parser
  */
-class Evaluator
+class Evaluator implements Evaluatable
 {
 
     /**
-     * @var
+     * @var array|null
      */
-    protected $expression;
-
-    /**
-     * @var
-     */
-    protected $ast;
+    private $ast;
 
     /**
      * @param string $expression
@@ -28,15 +24,11 @@ class Evaluator
      */
     public function parse(string $expression)
     {
-
-        $this->expression = $expression;
-
-        $syntactic = new Syntactic($this->expression);
-
+        $lexer = new Lexer($expression);
+        $syntactic = new Syntactic($lexer);
         $this->ast = $syntactic->parse();
 
         return $this->evaluate($this->ast);
-
     }
 
     /**

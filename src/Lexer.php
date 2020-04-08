@@ -2,6 +2,7 @@
 namespace Parser;
 
 
+use Parser\Contracts\Lexeable;
 use Parser\Helpers\Token;
 use InvalidArgumentException;
 
@@ -15,7 +16,7 @@ use InvalidArgumentException;
  * Class Lexer
  * @package Parser
  */
-class Lexer
+class Lexer implements Lexeable
 {
 
     /**
@@ -37,7 +38,6 @@ class Lexer
     {
         $this->expression = $expression;
         $this->tokens     = [];
-        $this->tokenize();
     }
 
     /**
@@ -61,7 +61,7 @@ class Lexer
      * Tokenize given expression and put into the tokens property
      * @throws InvalidArgumentException
      */
-    private function tokenize(): void
+    public function tokenize(): void
     {
         if (empty($this->expression)) {
             throw new InvalidArgumentException('Cannot process an empty expression');

@@ -3,6 +3,8 @@
 namespace Parser;
 
 use InvalidArgumentException;
+use Parser\Contracts\ASTInterface;
+use Parser\Contracts\Lexeable;
 use Parser\Helpers\Token;
 use RuntimeException;
 
@@ -16,7 +18,7 @@ use RuntimeException;
  * Class Syntactic
  * @package Parser
  */
-class Syntactic
+class Syntactic implements ASTInterface
 {
 
     /**
@@ -39,11 +41,11 @@ class Syntactic
 
     /**
      * Syntactic constructor.
-     * @param $expression
+     * @param Lexeable $lexeable
      */
-    public function __construct($expression)
+    public function __construct(Lexeable $lexeable)
     {
-        $this->lexer = new Lexer($expression);
+        $this->lexer = $lexeable;
     }
 
     /**
@@ -59,6 +61,7 @@ class Syntactic
      */
     public function parse() : ?array
     {
+        $this->lexer->tokenize();
 
         $this->token = $this->lexer->getNextToken(); // get the first token
 
@@ -70,8 +73,7 @@ class Syntactic
 
         $token = $this->read('EOF');
 
-        if (!$token)
-        {
+        if (!$token) {
             throw new RuntimeException('Error Processing Request');
         }
 
