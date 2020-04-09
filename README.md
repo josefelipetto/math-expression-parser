@@ -5,9 +5,9 @@ A Math expression parser built in PHP.
 * PHP 7.1
 
 # Installation
-You can install the component using composer. 
-Inside your project folder, type: composer require josefelipetto/math-expression-parser. This will update your
-composer.json file to require the component. 
+You can install the component by using composer. 
+
+`composer require josefelipetto/math-expression-parser`
 
 # How to use
 
