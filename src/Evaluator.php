@@ -2,6 +2,7 @@
 
 namespace Parser;
 
+use Parser\Contracts\ASTInterface;
 use Parser\Contracts\Evaluatable;
 use RunTimeException;
 
@@ -13,24 +14,25 @@ class Evaluator implements Evaluatable
 {
 
     /**
-     * @var array|null
+     * @var ASTInterface
      */
-    private $ast;
+    private $astParser;
 
     /**
-     * @param string $expression
-     * @return float|int|mixed
-     * @throws RuntimeException
+     * @param ASTInterface $astParser
      */
-    public function parse(string $expression)
+    public function __construct(ASTInterface $astParser)
     {
-        $lexer = new Lexer($expression);
-        $syntactic = new Syntactic($lexer);
-        $this->ast = $syntactic->parse();
-
-        return $this->evaluate($this->ast);
+        $this->astParser = $astParser;
     }
 
+    /**
+     * @return float|int|mixed
+     */
+    public function parse()
+    {
+        return $this->evaluate($this->astParser->parse());
+    }
     /**
      * @param $ast
      * @return float|int|mixed
